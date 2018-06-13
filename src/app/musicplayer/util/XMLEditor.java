@@ -44,8 +44,8 @@ public class XMLEditor {
 	// Khởi tạo array lists để lưu tên file của bài hát trong xml
 	// Mảng này sẽ được kiểm tra nếu bất cứ bài hát nào được thêm hoặc xóa trong folder âm nhạc
 	private static ArrayList<String> xmlSongsFileNames = new ArrayList<>();
-	// Stores the file paths of the xml songs.
-	// This is important if a song has to be removed from the xml file as it is used to find the node to remove. 
+	// Lưu đường dẫn đến bài hát
+	// Nếu bạn xóa một bài hát khỏi xml file cũng như dùng để tìm node và remove.
 	private static ArrayList<String> xmlSongsFilePaths = new ArrayList<>();
 
 	//Khởi tạo mảng danh sách lưu tên file bài hát trong thư mục nhạc
@@ -55,12 +55,14 @@ public class XMLEditor {
 	// Danh sách lưu file bài hát trong thư mục nhạc
 	private static ArrayList<File> musicDirFiles = new ArrayList<>();
 	
-	// Initializes array list with song files of songs to be added to library.xml
+
+	// Danh sách với những file nhạc cần được thêm
 	private static ArrayList<File> songFilesToAdd = new ArrayList<>();
 	
 	// Initializes array list with song paths of songs to be deleted from library.xml
 	private static ArrayList<String> songPathsToDelete = new ArrayList<>();
 
+	// Danh sách những bài hát cần được thêm sau khi khởi tạo đối tượng
 	private static ArrayList<Song> songsToAdd = new ArrayList<>();
 	
 	// Initializes booleans used to determine how the library.xml file needs to be edited.
@@ -73,55 +75,56 @@ public class XMLEditor {
 		musicDirectory = musicDirectoryPath.toString();
 	}
 
+	/**
+	 *
+	 */
 	public static void addDeleteChecker() {
-		// Finds the file name of the songs in the library xml file and
-		// stores them in the xmlSongsFileNames array list.
+		// Tìm tên các filename (file nhạc) trong library xml file và lưu chúng
+		// vào ArrayList xmlSongsFileNames
 		xmlSongsFilePathFinder();
 
-		// Finds the song titles in the music directory and stores them in the librarySongs array list.
+		// Tìm tên file bài hát trong folder nhạc và lưu chúng vào danh sách musicDirFiles,musicDirFileNames arraylist
 		musicDirFileFinder(new File(musicDirectory));
 							
-		// Initializes a counter variable to index the musicDirFiles array to get the file
-		// corresponding to the song that needs to be added to the xml file.
+		//Khởi tạo biến đếm để xác định chính xác bài hát nào cần được thêm hoặc xóa
 		int i = 0;
-		// Loops through musicDirFiles and checks if the song file names are in the library.xml file. 
-		// If not, then the song needs to be ADDED.
+
+		// Lặp trong musicDirFiles và kiểm tra bài hát đã có trong library.xml
+		// Nếu không thì thêm tệp vào xml
 		for (String songFileName : musicDirFileNames) {
-			// If the song file name is not in the xmlSongsFilenames,
-			// then it was added to the music directory and needs to be added to the xml file.
+			// Nếu file nhạc không có trong xmlSongsFilenames, thêm file nhạc vào xml
 			if (!xmlSongsFileNames.contains(songFileName)) {
-				// Adds the song file that needs to be added to the array list in XMLEditor.
+				// Thêm file nhạc cần vào mảng file nhạc cần thêm.
 				songFilesToAdd.add(musicDirFiles.get(i));
 				addSongs = true;
 			}
 			i++;
 		}
 		
-		// Initializes a counter variable to index the xmlSongsFilePaths array to get the
-		// file path of the songs that need to be removed from the xml file.
+
 		int j = 0;
-		// Loops through xmlSongsFileNames and checks if all the xml songs are in the music directory.
-		// If one of the songs in the xml file is not in the music directory, then it was DELETED.
+		// Lặp xmlSongsFileNames và kiểm tra nếu tất cả bài hát trong xml có trong folder nhạc
+		// Nếu một hoặc nhiều bài hát của xml không có trong folder nhạc thì sẽ xóa.
 		for (String songFileName : xmlSongsFileNames) {
-			// If the songFileName is not in the musicDirFileNames,
-			// then it was deleted from the music directory and needs to be deleted from the xml file.
+			// Nếu songFileName không có trong musicDirFileNames thì thêm nó
+			// vào danh sách cần xóa songPathsToDelete
 			if (!musicDirFileNames.contains(songFileName)) {
-				// Adds the songs that needs to be deleted to the array list in XMLEditor.
+				// Thêm bài hát cần xóa vào mảng cần xóa
 				songPathsToDelete.add(xmlSongsFilePaths.get(j));
 				deleteSongs = true;
 			}
 			j++;
 		}
 		
-		// If a song needs to be added to the xml file.
+		// Nếu bài hát cần được thêm vào xml file
 		if (addSongs) {	
-            // Adds the new song to the xml file.
+            // Thêm những bài hát mới vào xml
 			addSongToXML();
 		}
 		
-        // If a song needs to be deleted from the xml file.
+        // Nếu bài hát cần được xóa khỏi xml file
 		if (deleteSongs) {
-			// Deletes song from library xml file.
+			// Xóa bài hát từ file xml
 			deleteSongFromXML();
 		}
 		
@@ -172,25 +175,30 @@ public class XMLEditor {
 		// Duyệt tất cả đường dẫn file nhạc trong folder nhạc và lưu chúng vào mảng musicDirectoryFile
         File[] files = musicDirectoryFile.listFiles();
 
-        // Loops through the files.
         for (File file : files) {
             if (file.isFile() && Library.isSupportedFileType(file.getName())) {
-            	// Adds the file to the musicDirFiles array list. 
+            	// Adds the file to the musicDirFiles array list.
+				// Thêm đường dẫn file vào arraylist musicDirFiles
             	musicDirFiles.add(file);
-            	
-            	// Adds the file name to the musicDirFileNames array list.
+
+				// Thêm tên của file nhạc vào musicDirFileNames array list.
             	musicDirFileNames.add(file.getName());
             } else if (file.isDirectory()) {
             	musicDirFileFinder(file);
             }
         }
 	}
-	
+
+	/**
+	 * Thêm bài hát mới trong folder nhạc vào file xml
+	 */
 	private static void addSongToXML() {
-		// Initializes the array list with song objects to add to the xml file.
+		// Khởi tạo mảng danh sách những đối tượng songsToAdd dựa vào danh sách file bài hát
+		// cần được thêm
 		createNewSongObject();
 		
 		if (songsToAdd.size() == 0) {
+			System.out.println("Khong bai hat nao can dc them vao");
 			return;
 		}
 		
@@ -201,14 +209,13 @@ public class XMLEditor {
 			
             XPathFactory xPathfactory = XPathFactory.newInstance();
             XPath xpath = xPathfactory.newXPath();
-            
-            // Creates node to add songs.
+
+			// Tạo node danh sách bài hát songs
             XPathExpression expr = xpath.compile("/library/songs");
             Node songsNode = ((NodeList) expr.evaluate(doc, XPathConstants.NODESET)).item(0);
-            
-            // Loops through the songs in the new song array list and adds them to the xml file.
+
             for (Song song : songsToAdd) {
-                // Creates a new song element and its sub elements.
+                // Khởi tạo các element chứa thông tin bài hát
                 Element newSong = doc.createElement("song");
                 Element newSongId = doc.createElement("id");
                 Element newSongTitle = doc.createElement("title");
@@ -221,7 +228,7 @@ public class XMLEditor {
                 Element newSongPlayDate = doc.createElement("playDate");
                 Element newSongLocation = doc.createElement("location");
 
-                // Saves the new song data.
+                // Lưu bài hát mới
                 newSongId.setTextContent(Integer.toString(song.getId()));
                 newSongTitle.setTextContent(song.getTitle());
                 newSongArtist.setTextContent(song.getArtist());
@@ -233,9 +240,9 @@ public class XMLEditor {
                 newSongPlayDate.setTextContent(song.getPlayDate().toString());
                 newSongLocation.setTextContent(song.getLocation());
                 
-                // Adds the new song to the xml file.
+                // Thêm bài hát mới vào node danh sách bài hát
                 songsNode.appendChild(newSong);
-                // Adds the new song data to the new song.
+                // Thêm dữ liệu bài hát cho bài hát mới.
                 newSong.appendChild(newSongId);
                 newSong.appendChild(newSongTitle);
                 newSong.appendChild(newSongArtist);
@@ -249,27 +256,28 @@ public class XMLEditor {
             }
             
             // Calculates the new xml file number, taking into account the new songs.
+			// Tính toán tổng số bài hát sau khi thêm
             int newXMLFileNum = MusicPlayer.getXMLFileNum() + songFilesToAdd.size();
 
-            // Creates node to update xml file number.
+            // Tạo node cập nhật file number
             expr = xpath.compile("/library/musicLibrary/fileNum");
             Node fileNum = ((NodeList) expr.evaluate(doc, XPathConstants.NODESET)).item(0);
-            
-            // Updates the fileNum field in the xml file.
+
+			// Cập nhật cột fileNum trong xml file
             fileNum.setTextContent(Integer.toString(newXMLFileNum));
-            // Updates the xmlFileNum in MusicPlayer. 
+            // Cập nhật xmlFileNum trong MusicPlayer.
             MusicPlayer.setXMLFileNum(newXMLFileNum);
-            
-            // Gets the new last id assigned after adding all the new songs.
+
+			// Lấy giá trị last id trước khi thêm tất cả các file nhạc mới
             int newLastIdAssigned = songsToAdd.get(songsToAdd.size() - 1).getId();
             
-            // Creates node to update xml last id assigned.
+            // Tạo node lastID trong xml
             expr = xpath.compile("/library/musicLibrary/lastId");
             Node lastId = ((NodeList) expr.evaluate(doc, XPathConstants.NODESET)).item(0);
             
-            // Updates the last id in the xml file.
+            // Cập nhật lastId trong xml
             lastId.setTextContent(Integer.toString(newLastIdAssigned));
-            // Updates the lastId in MusicPlayer.
+            // Cập nhật lastId trong MusicPlayer.
         	MusicPlayer.setLastIdAssigned(newLastIdAssigned);
             
             
@@ -284,9 +292,14 @@ public class XMLEditor {
             
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			System.out.println("XMLEditor: Khong tao duoc file library.xml");
 		}
 	}
-	
+
+	/**
+	 * Tạo một đối tượng Song với các thuộc tính
+	 * id, title, artist, album, length, trackNumber, discNumber, playCount, playDate, location
+	 */
 	private static void createNewSongObject() {
 		
 		// Searches the xml file to get the last id assigned.
@@ -334,7 +347,11 @@ public class XMLEditor {
 		// Updates the lastIdAssigned in MusicPlayer to account for the new songs.
 		MusicPlayer.setLastIdAssigned(lastIdAssigned);
 	}
-	
+
+	/**
+	 * Tìm giá trị lastID trong file library xml
+	 * * @return
+	 */
     private static int xmlLastIdAssignedFinder() {
 		try {
 			// Creates reader for xml file.
@@ -370,7 +387,7 @@ public class XMLEditor {
     }
 	
 	private static void deleteSongFromXML() {
-		// Gets the currentXMLFileNum.
+		// Lấy currentXMLFileNum.
 		int currentXMLFileNum = MusicPlayer.getXMLFileNum();
 
         try {
@@ -381,29 +398,32 @@ public class XMLEditor {
             XPathFactory xPathfactory = XPathFactory.newInstance();
             XPath xpath = xPathfactory.newXPath();
             
-            // Retrieves the last id assigned to a song from the xml file.
+            // Lấy lastID trong file xml
             int xmlLastIdAssigned = xmlLastIdAssignedFinder();
 
             // Finds the song node corresponding to the last assigned id.
+			// Tìm node bài hát trong xml dựa vào lastid
             XPathExpression expr = xpath.compile("/library/songs/song[id/text() = \"" + xmlLastIdAssigned + "\"]");
             Node lastSongNode = ((NodeList) expr.evaluate(doc, XPathConstants.NODESET)).item(0);
             
-            // Loops through the songPathsToDelete array list and removes the nodes from the xml file.
+            // Loops songPathsToDelete array list và xóa những bài hát có đường dẫn giống
+			// với giá trị trong songPathsToDelte
+
             Node deleteSongNode = null;
             for (String songFilePath : songPathsToDelete) {
-                // Finds the node with the song title marked for removal.
+                // Tìm node dựa vào location
             	expr = xpath.compile("/library/songs/song[location/text() = \"" + songFilePath + "\"]");
                 deleteSongNode = ((NodeList) expr.evaluate(doc, XPathConstants.NODESET)).item(0);
                 
-                // Removes the node corresponding to the title of the song.
+                // Xóa node bài hát
                 deleteSongNode.getParentNode().removeChild(deleteSongNode);
 
-            	// Decreases the counter for the number of files in the xml file.
+            	// Giảm fileNum -  tổng số bài hát hiện tại
                 currentXMLFileNum--;
             }
-            
-            // If the last node to be deleted was the last song node,
-            // then the new last assigned id is found and updated in the MusicPlayer and xml file.
+
+			// Nếu lastNode bị xóa và cũng là node bài hát cuối cùng thì ta tìm
+			// lastIdAssignId mới và cập nhật lại trong MusicPlayer và xml file
             if (deleteSongNode == lastSongNode) {
             	int newLastIdAssigned = xmlNewLastIdAssignedFinder();
 
@@ -416,11 +436,11 @@ public class XMLEditor {
                 lastId.setTextContent(Integer.toString(newLastIdAssigned));
             }
             
-            // Creates node to update xml file number.
+            // Tạo node update xml file number.
             XPathExpression fileNumExpr = xpath.compile("/library/musicLibrary/fileNum");
             Node fileNum = ((NodeList) fileNumExpr.evaluate(doc, XPathConstants.NODESET)).item(0);
-            
-            // Updates the fileNum in MusicPlayer and in the xml file.
+
+			// Cập nhật fileNum trong MusicPlayer và trong xml file
             MusicPlayer.setXMLFileNum(currentXMLFileNum);
             fileNum.setTextContent(Integer.toString(currentXMLFileNum));
                     
@@ -435,9 +455,13 @@ public class XMLEditor {
             
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			System.out.println("Khong bai hat nao can xoa");
 		}
 	}
-	
+
+	/**
+	 * Lấy lastId mới
+	 */
     private static int xmlNewLastIdAssignedFinder() {
 		try {
 			// Creates reader for xml file.

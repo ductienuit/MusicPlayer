@@ -113,6 +113,7 @@ public class MusicPlayer extends Application {
             checkLibraryXML();
         } catch (Exception ex) {
             ex.printStackTrace();
+            System.out.println("Loi: "+ex);
             System.exit(0);
         }
 
@@ -207,24 +208,20 @@ public class MusicPlayer extends Application {
         // Nếu file tồn tại, kiểm tra xem đường dẫn folder nhạc có thay đổi
         Path musicDirectory;
         if (libraryXML.exists()) {
-            // Gets music directory path from xml file so that the number of files in the
-            // music directory can be counted and compared to the data in the xml file.
-            // It is then passed as an argument when creating the directory watch.
             // Lấy đường dẫn folder âm nhạc từ xml file sau đó đếm số file trong folder
             // so sánh với số numFile trong xml file, để xem xét việc cập nhật library.xml
             musicDirectory = xmlMusicDirPathFinder();
 
-            // Try/catch block to deal with case where music directory has been renamed.
+            // Try/catch trường hợp folder bị thay đổi
             try {
-                // Gets the number of files in the music directory and the number of files saved in the xml file.
-                // These values will be compared to determine if the xml file needs to be updated.
+                // Lấy số bài hát thực trong folder nhạc và Lấy số bài hát trong file xml
+                // So sánh để biết cần cập nhật hay không
                 int musicDirFileNum = musicDirFileNumFinder(musicDirectory.toFile(), 0);
                 xmlFileNum = xmlMusicDirFileNumFinder();
 
-                // If the number of files stored in the xml file is not the same as the number of files in the music directory.
-                // Music library has changed; update the xml file.
+                //Nếu khác nhau, thư viện nhạc bị thay đổi. Phải cập nhật library.xml
                 if (musicDirFileNum != xmlFileNum) {
-                    // Updates the xml file from the saved music directory.
+                    // Cập nhật file library.xml từ folder nhạc
                     updateLibraryXML(musicDirectory);
                 }
                 // NullPointerException thrown by musicDirFileNumFinder().
@@ -284,6 +281,9 @@ public class MusicPlayer extends Application {
         }
     }
 
+    /**
+     *  Số bài hát trong được lưu trong file xml
+     */
     private static int xmlMusicDirFileNumFinder() {
         try {
             // Creates reader for xml file.
@@ -318,6 +318,12 @@ public class MusicPlayer extends Application {
         }
     }
 
+    /**
+     * Số file trong folder nhạc
+     * @param musicDirectory Đường dẫn folder nhạc
+     * @param i giá trị được trả về
+     * @return
+     */
     private static int musicDirFileNumFinder(File musicDirectory, int i) {
         // Lists all the files in the music directory and stores them in an array.
         File[] files = musicDirectory.listFiles();
@@ -334,11 +340,10 @@ public class MusicPlayer extends Application {
     }
 
     private static void updateLibraryXML(Path musicDirectory) {
-        // Sets the music directory for the XMLEditor.
+        // Cài đặt đường dẫn folder nhạc vào XMLEditor.
         XMLEditor.setMusicDirectory(musicDirectory);
 
-        // Checks if songs have to be added, deleted, or both to the xml file and
-        // performs the corresponding operation.
+        // Kiểm tra nếu các bài hát cần được thêm hoặc cần được xóa trên xml file
         XMLEditor.addDeleteChecker();
     }
 
