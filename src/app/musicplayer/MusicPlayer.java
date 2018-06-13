@@ -159,21 +159,27 @@ public class MusicPlayer extends Application {
             File imgFolder = new File(Resources.JAR + "/img");
             if (!imgFolder.exists()) {
 
-                Thread thread1 = new Thread(() -> Library.getArtists().forEach(Artist::downloadArtistImage));
+                Thread thread1 = new Thread(() -> {
+                    Library.getArtists().forEach(Artist::downloadArtistImage);
+                });
 
-                Thread thread2 = new Thread(() -> Library.getAlbums().forEach(Album::downloadArtwork));
+                Thread thread2 = new Thread(() -> {
+                    Library.getAlbums().forEach(Album::downloadArtwork);
+                });
 
                 thread1.start();
                 thread2.start();
             }
 
-            new Thread(() -> XMLEditor.getNewSongs().forEach(song -> {
-                try {
-                    Library.getArtist(song.getArtist()).downloadArtistImage();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            })).start();
+            new Thread(() -> {
+                XMLEditor.getNewSongs().forEach(song -> {
+                    try {
+                        Library.getArtist(song.getArtist()).downloadArtistImage();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                });
+            }).start();
 
             // Calls the function to initialize the main layout.
             Platform.runLater(this::initMain);
