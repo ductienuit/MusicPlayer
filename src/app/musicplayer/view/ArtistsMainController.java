@@ -52,7 +52,10 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 public class ArtistsMainController implements Initializable, SubView {
-
+    /**
+     * @author haitho
+     *  class ArtistCell tạo ra các cell trên TableView
+     */
     private class ArtistCell extends ListCell<Artist> {
 
         private HBox cell = new HBox();
