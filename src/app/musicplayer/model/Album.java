@@ -101,6 +101,9 @@ public final class Album implements Comparable<Album> {
         return this.artwork;
     }
 
+    /**
+     * Tải artwork online dựa vào ca sĩ và tên album
+     */
     public void downloadArtwork() {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
