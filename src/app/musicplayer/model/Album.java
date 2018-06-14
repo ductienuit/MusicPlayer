@@ -33,8 +33,8 @@ public final class Album implements Comparable<Album> {
     private SimpleObjectProperty<Image> artworkProperty;
 
     /**
-     * Constructor for the Album class. 
-     * Creates an album object and obtains the album artwork.
+     * Constructor của lớp Album
+     * Tạo đối tượng album và lấy album artwork.
      *
      * @param id
      * @param title
