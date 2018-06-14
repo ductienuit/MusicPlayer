@@ -98,7 +98,7 @@ public class MainController implements Initializable, IntellitypeListener {
     	
     	createVolumePopup();
         createSearchPopup();
-    	
+
     	PseudoClass active = PseudoClass.getPseudoClass("active");
     	loopButton.setOnMouseClicked(x -> {
     		sideBar.requestFocus();
@@ -244,11 +244,14 @@ public class MainController implements Initializable, IntellitypeListener {
         	popup.initOwner(stage);
         	popup.setX(stage.getWidth() - 270);
         	popup.setY(stage.getHeight() - 120);
+
+        	//Animation khi mở volumePopup
         	popup.focusedProperty().addListener((x, wasFocused, isFocused) -> {
         		if (wasFocused && !isFocused) {
         			volumeHideAnimation.play();
         		}
         	});
+        	//Xử lí sao khi hiệu ứng kết thúc
         	volumeHideAnimation.setOnFinished(x -> popup.hide());
         	
         	popup.show();
@@ -1040,10 +1043,13 @@ public class MainController implements Initializable, IntellitypeListener {
     
     private Animation volumeShowAnimation = new Transition() {
     	{
+            //Duration là thời gian sẽ hiển thị
             setCycleDuration(Duration.millis(250));
+            //Loại hiệu ứng
             setInterpolator(Interpolator.EASE_BOTH);
         }
-    	
+
+        //Độ mờ giảm dần để hiển thị control
         protected void interpolate(double frac) {
         	volumePopup.setOpacity(frac);
         }
@@ -1051,9 +1057,13 @@ public class MainController implements Initializable, IntellitypeListener {
     
     private Animation volumeHideAnimation = new Transition() {
     	{
+    	    //Duration là thời gian sẽ hiển thị
             setCycleDuration(Duration.millis(250));
+            //Loại hiệu ứng
             setInterpolator(Interpolator.EASE_BOTH);
         }
+
+        //Độ mờ tăng dần
         protected void interpolate(double frac) {
             volumePopup.setOpacity(1.0 - frac);
         }
@@ -1061,7 +1071,9 @@ public class MainController implements Initializable, IntellitypeListener {
 
     private Animation searchShowAnimation = new Transition() {
         {
+            //Duration là thời gian sẽ hiển thị
             setCycleDuration(Duration.millis(250));
+            //Loại hiệu ứng
             setInterpolator(Interpolator.EASE_BOTH);
         }
 
@@ -1072,7 +1084,9 @@ public class MainController implements Initializable, IntellitypeListener {
 
     private Animation searchHideAnimation = new Transition() {
         {
+            //Duration là thời gian sẽ hiển thị
             setCycleDuration(Duration.millis(250));
+            //Loại hiệu ứng
             setInterpolator(Interpolator.EASE_BOTH);
         }
         protected void interpolate(double frac) {
@@ -1082,10 +1096,16 @@ public class MainController implements Initializable, IntellitypeListener {
     
     private Animation collapseAnimation = new Transition() {
         {
+            //Duration là thời gian sẽ hiển thị
             setCycleDuration(Duration.millis(250));
+            //Loại hiệu ứng
             setInterpolator(Interpolator.EASE_BOTH);
+            //Kết thúc chương animation thì đặt lại giá trị isSideBarExpanded
             setOnFinished(x -> setSlideDirection());
         }
+        //Biến frac tăng dần, làm cho chiều dài và chiều rộng của control được co giản
+        //Các control khác đều là Border Pan nên sẽ co giản tương ứng với việc thay đổi
+        //kích thước của thanh search và sidBar
         protected void interpolate(double frac) {
             double curWidth = collapsedWidth + (expandedWidth - collapsedWidth) * (1.0 - frac);
 			double searchWidth = searchCollapsed + (searchExpanded - searchCollapsed) * (1.0 - frac);

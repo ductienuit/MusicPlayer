@@ -43,7 +43,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 /**
- * @author DucTien 
+ * @author DucTien
  */
 public class MusicPlayer extends Application {
 
