@@ -632,6 +632,10 @@ public final class Library {
         return playlists.stream().filter(playlist -> title.equals(playlist.getTitle())).findFirst().get();
     }
 
+    /**
+     * Lấy danh sách bài hát đang được chơi
+     * @return  ArrayList<Song>
+     */
     public static ArrayList<Song> loadPlayingList() {
 
         ArrayList<Song> nowPlayingList = new ArrayList<>();
