@@ -51,6 +51,7 @@ public final class Library {
     private static final String PLAYDATE = "playDate";
     private static final String LOCATION = "location";
 
+    //Mảng danh sách đối tượng Song
     private static ArrayList<Song> songs;
     private static ArrayList<Artist> artists;
     private static ArrayList<Album> albums;
@@ -58,6 +59,12 @@ public final class Library {
     private static int maxProgress;
     private static ImportMusicTask<Boolean> task;
 
+    /**
+     * Tạo file xml từ folder nhạc sử dụng task để tăng tốc độ xử lí
+     * @param path Đường dẫn folder nhạc
+     * @param task Tiến trình thêm danh sách, đồng bộ với controller progress hiển thị
+     *             % hoàn thành
+     */
     public static void importMusic(String path, ImportMusicTask<Boolean> task) throws Exception {
 
         Library.maxProgress = 0;
@@ -91,18 +98,20 @@ public final class Library {
         int id = 0;
         File directory = new File(Paths.get(path).toUri());
 
+        //Lấy số file để biết cần bao nhiêu file trong tiến trình
         getMaxProgress(directory);
+        //Cập nhật max min trong control progress để hiển thị khi nào xong
         Library.task.updateProgress(id, Library.maxProgress);
 
-        // Writes xml file and returns the number of files in the music directory.
+        // Viết vào XML file và trả về số file trong folder nhạc
         int i = writeXML(directory, doc, songs, id);
         String fileNumber = Integer.toString(i);
 
-        // Adds the number of files in the music directory to the appropriate section in the xml file.
+        // Thêm số file trong folder nhạc vào xml
         musicLibraryFileNum.setTextContent(fileNumber);
         musicLibrary.appendChild(musicLibraryFileNum);
 
-        // Finds the last id that was assigned to a song and adds it to the xml file.
+        // Tìm last id trong danh sách bài hát và thêm vào xml
         int j = i - 1;
         lastIdAssigned.setTextContent(Integer.toString(j));
         musicLibrary.appendChild(lastIdAssigned);
@@ -122,6 +131,10 @@ public final class Library {
         Library.task = null;
     }
 
+    /**
+     * Tính số file nhạc được hỗ trợ trong đường dẫn
+     * @param directory đường dẫn folder âm nhạc
+     */
     private static void getMaxProgress(File directory) {
         File[] files = directory.listFiles();
 
@@ -134,6 +147,14 @@ public final class Library {
         }
     }
 
+    /**
+     * Thêm các element bài hát vào element danh sách. Mục đích lưu vào trong xml
+     * @param directory Đường dẫn folder chứa nhạc
+     * @param doc Trình tạo xml
+     * @param songs Node Songs - Chứa danh sách thông tin các bài hát
+     * @param i Cập nhật progress % hoàn thành
+     * @return
+     */
     private static int writeXML(File directory, Document doc, Element songs, int i) {
         File[] files = directory.listFiles();
 
@@ -208,6 +229,11 @@ public final class Library {
         return i;
     }
 
+    /**
+     *  Kiểm tra có nằm trong danh sách file được hỗ trợ
+     * @param fileName
+     * @return
+     */
     public static boolean isSupportedFileType(String fileName) {
 
         String extension = "";
@@ -231,7 +257,7 @@ public final class Library {
     }
 
     /**
-     * Gets a list of songs.
+     * Lấy danh sách đối tượng song (bài hát)
      * @return observable list of songs
      */
     public static ObservableList<Song> getSongs() {
@@ -258,6 +284,10 @@ public final class Library {
         return songs.stream().filter(song -> title.equals(song.getTitle())).findFirst().get();
     }
 
+    /**
+     * Cập nhật SongsList
+     * Duyệt toàn bộ library xml file và tạo đối tượng ánh xạ Song sau đó thêm vào songsList
+     */
     private static void updateSongsList() {
         try {
 
@@ -349,9 +379,8 @@ public final class Library {
     }
 
     /**
-     * Gets a list of albums.
-     *
-     * @return observable list of albums
+     * Lấy ra albums arraylist
+     * Duyệt toàn bộ library xml file và tạo đối tượng ánh xạ album sau đó thêm vào albums arraylist
      */
     public static ObservableList<Album> getAlbums() {
         // If the observable list of albums has not been initialized.
@@ -372,6 +401,10 @@ public final class Library {
         return albums.stream().filter(album -> title.equals(album.getTitle())).findFirst().get();
     }
 
+    /**
+     * Cập nhật albums list arraylist
+     * Duyệt toàn bộ library xml file và tạo đối tượng ánh xạ album sau đó thêm vào albums arraylist
+     */
     private static void updateAlbumsList() {
         albums = new ArrayList<>();
 

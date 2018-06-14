@@ -1,84 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <library>
     <musicLibrary>
-        <path>D:\Music\test</path>
-        <fileNum>6</fileNum>
-        <lastId>5</lastId>
+        <path>G:\CV_DT</path>
+        <fileNum>0</fileNum>
+        <lastId>-1</lastId>
     </musicLibrary>
-    <songs>
-        <song>
-            <id>0</id>
-            <title>3LAU - How You Love Me (Feat. Bright Lights) ~by Thissongissick.com [soundtake.net]</title>
-            <artist>Duc Tien</artist>
-            <album>Hello My World</album>
-            <length>210</length>
-            <trackNumber>0</trackNumber>
-            <discNumber>0</discNumber>
-            <playCount>0</playCount>
-            <playDate>2018-06-13T22:21:26.337</playDate>
-            <location>D:\Music\test\3LAU - How You Love Me (Feat. Bright Lights) ~by Thissongissick.com [soundtake.net].mp3</location>
-        </song>
-        <song>
-            <id>1</id>
-            <title>A R I Z O N A - Where I Wanna Be (James Carter &amp; Levi Remix) ~by James Carter [soundtake.net]</title>
-            <artist>Duc Tien</artist>
-            <album>Nhu Chua Tung Yeu</album>
-            <length>170</length>
-            <trackNumber>0</trackNumber>
-            <discNumber>0</discNumber>
-            <playCount>0</playCount>
-            <playDate>2018-06-13T22:21:26.398</playDate>
-            <location>D:\Music\test\A R I Z O N A - Where I Wanna Be (James Carter &amp; Levi Remix) ~by James Carter [soundtake.net].mp3</location>
-        </song>
-        <song>
-            <id>2</id>
-            <title>aKu - The Final Blow ~by aKu [soundtake.net]</title>
-            <artist>Giang</artist>
-            <album>Khong</album>
-            <length>153</length>
-            <trackNumber>0</trackNumber>
-            <discNumber>0</discNumber>
-            <playCount>0</playCount>
-            <playDate>2018-06-13T22:21:26.450</playDate>
-            <location>D:\Music\test\aKu - The Final Blow ~by aKu [soundtake.net].mp3</location>
-        </song>
-        <song>
-            <id>3</id>
-            <title>Alina Baraz &amp; Galimatias - Fantasy ~by Alina Baraz [soundtake.net]</title>
-            <artist>Hehe</artist>
-            <album>Khong cam xuc</album>
-            <length>218</length>
-            <trackNumber>0</trackNumber>
-            <discNumber>0</discNumber>
-            <playCount>0</playCount>
-            <playDate>2018-06-13T22:21:26.497</playDate>
-            <location>D:\Music\test\Alina Baraz &amp; Galimatias - Fantasy ~by Alina Baraz [soundtake.net].mp3</location>
-        </song>
-        <song>
-            <id>4</id>
-            <title>Armin van Buuren feat. Mr. Probz - Another You (Mark Sixma Remix) [ASOT 711] [OUT NOW!] ~by Mark Sixma [soundtake.net]</title>
-            <artist>Hoho</artist>
-            <album>Khac</album>
-            <length>189</length>
-            <trackNumber>0</trackNumber>
-            <discNumber>0</discNumber>
-            <playCount>0</playCount>
-            <playDate>2018-06-13T22:21:26.520</playDate>
-            <location>D:\Music\test\Armin van Buuren feat. Mr. Probz - Another You (Mark Sixma Remix) [ASOT 711] [OUT NOW!] ~by Mark Sixma [soundtake.net] - Copy.mp3</location>
-        </song>
-        <song>
-            <id>5</id>
-            <title>Armin van Buuren feat. Mr. Probz - Another You (Mark Sixma Remix) [ASOT 711] [OUT NOW!] ~by Mark Sixma [soundtake.net]</title>
-            <artist>Hoho</artist>
-            <album>Khac</album>
-            <length>189</length>
-            <trackNumber>0</trackNumber>
-            <discNumber>0</discNumber>
-            <playCount>0</playCount>
-            <playDate>2018-06-13T22:21:26.561</playDate>
-            <location>D:\Music\test\Armin van Buuren feat. Mr. Probz - Another You (Mark Sixma Remix) [ASOT 711] [OUT NOW!] ~by Mark Sixma [soundtake.net].mp3</location>
-        </song>
-    </songs>
+    <songs/>
     <playlists/>
     <nowPlayingList/>
 </library>
