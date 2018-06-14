@@ -546,7 +546,7 @@ public class ArtistsMainController implements Initializable, SubView {
     public Song getSelectedSong() {
     	return selectedSong;
     }
-
+// Hiện danh sách các bài hát trong Album artist
     private void showAllSongs(Artist artist, boolean fromMainController) {
 
         ObservableList<Album> albums = FXCollections.observableArrayList();
@@ -616,7 +616,7 @@ public class ArtistsMainController implements Initializable, SubView {
 			songTableLoadAnimation.play();
         }).start();
     }
-    
+    //
     @Override
     public void play() {
     	
@@ -631,7 +631,7 @@ public class ArtistsMainController implements Initializable, SubView {
             }
         }
         
-        if (MusicPlayer.isShuffleActive()) {
+            if (MusicPlayer.isShuffleActive()) {
         	Collections.shuffle(songs);
         	songs.remove(song);
         	songs.add(0, song);
