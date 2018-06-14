@@ -463,8 +463,8 @@ public class MainController implements Initializable, IntellitypeListener {
         HBox eventSource = ((HBox)e.getSource());
 
         eventSource.requestFocus();
-
-        Optional<Node> previous = sideBar.getChildren().stream()
+//Thêm lớp CSS cho lớp Control trước đó
+        Optional <Node> previous = sideBar.getChildren().stream()
             .filter(x -> x.getStyleClass().get(0).equals("sideBarItemSelected")).findFirst();
 
         if (previous.isPresent()) {
