@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 /**
  * Dialog to import music library.
- *
+ * @author DucTien
  */
 public class ImportMusicDialogController {
 	@FXML private Label label;
@@ -38,7 +38,13 @@ public class ImportMusicDialogController {
 	public boolean isMusicImported() {
 		return musicImported;
 	}
-	
+
+	/**
+	 * Hàm thực thi khí click vào button Import
+	 * Tạo task ImportMusic, Task tạo file library dựa vào folder nhạc
+	 * Quá trình % thực hiện task sẽ được đồng bộ và cập nhật với control progressBar
+	 * Trả về true nếu import thành công, false nếu không thành công
+	 */
 	@FXML
 	private void handleImport() {
 		try {

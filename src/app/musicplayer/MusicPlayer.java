@@ -339,6 +339,10 @@ public class MusicPlayer extends Application {
         return i;
     }
 
+    /**
+     * Cập nhật library.xml nếu như folder nhạc có thêm hoặc xóa, sửa một bài hát nào đó
+     * @param musicDirectory
+     */
     private static void updateLibraryXML(Path musicDirectory) {
         // Cài đặt đường dẫn folder nhạc vào XMLEditor.
         XMLEditor.setMusicDirectory(musicDirectory);
