@@ -31,6 +31,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -41,6 +42,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+/**
+ * @author DucTien 
+ */
 public class MusicPlayer extends Application {
 
     private static MainController mainController;
@@ -118,14 +122,16 @@ public class MusicPlayer extends Application {
         }
 
         Thread thread = new Thread(() -> {
-            // Retrieves song, album, artist, and playlist data from library.
+            // Lấy song, album, artist, và playlist data từ library xml
             Library.getSongs();
             Library.getAlbums();
             Library.getArtists();
             Library.getPlaylists();
 
+            //Load danh sách bài hát đang được chơi
             nowPlayingList = Library.loadPlayingList();
 
+            //Nếu danh sách rổng, lấy hai bài hát của ca sĩ đầu tiên
             if (nowPlayingList.isEmpty()) {
 
                 Artist artist = Library.getArtists().get(0);
@@ -145,6 +151,7 @@ public class MusicPlayer extends Application {
                 });
             }
 
+            //Set các thuộc tính khi khởi động chương trình(Bài hát đang chơi, index playing, ...)
             nowPlaying = nowPlayingList.get(0);
             nowPlayingIndex = 0;
             nowPlaying.setPlaying(true);
@@ -155,15 +162,19 @@ public class MusicPlayer extends Application {
             Media media = new Media(Paths.get(path).toUri().toString());
             mediaPlayer = new MediaPlayer(media);
             mediaPlayer.setVolume(0.5);
+            //Xếp vào queue thread cần xử lí (đây là bài hát tiếp theo)
             mediaPlayer.setOnEndOfMedia(new SongSkipper());
 
             File imgFolder = new File(Resources.JAR + "/img");
             if (!imgFolder.exists()) {
-
+                // Nếu thư mục img không tồn tại, tạo thread để download Artist Image
+                // vào thư mục img tương ứng với artist bài hát
                 Thread thread1 = new Thread(() -> {
                     Library.getArtists().forEach(Artist::downloadArtistImage);
                 });
 
+                // Nếu thư mục img không tồn tại, tạo thread để download Artwork Image
+                // vào thư mục img tương ứng với Artwork bài hát
                 Thread thread2 = new Thread(() -> {
                     Library.getAlbums().forEach(Album::downloadArtwork);
                 });
@@ -172,6 +183,7 @@ public class MusicPlayer extends Application {
                 thread2.start();
             }
 
+            //Download Artist image với những bài hát mới
             new Thread(() -> {
                 XMLEditor.getNewSongs().forEach(song -> {
                     try {
@@ -182,7 +194,7 @@ public class MusicPlayer extends Application {
                 });
             }).start();
 
-            // Calls the function to initialize the main layout.
+            // Gọi hàm khởi hàm main layout
             Platform.runLater(this::initMain);
         });
 
@@ -225,10 +237,10 @@ public class MusicPlayer extends Application {
                     updateLibraryXML(musicDirectory);
                 }
                 // NullPointerException thrown by musicDirFileNumFinder().
-                // It occurs if the music directory has been renamed
+                // Nó gặp lỗi vì đường dẫn có thể không còn tồn tại thay đổi
             } catch (NullPointerException npe) {
                 createLibraryXML();
-                // Gets the number of files saved in the xml file.
+                //Lấy số file được lưu trong xml
                 xmlFileNum = xmlMusicDirFileNumFinder();
                 // Gets music directory path from xml file so that it can be passed as an argument when creating the directory watch.
                 musicDirectory = xmlMusicDirPathFinder();
@@ -240,13 +252,30 @@ public class MusicPlayer extends Application {
             // Gets the number of files saved in the xml file.
             xmlFileNum = xmlMusicDirFileNumFinder();
             // Gets music directory path from xml file so that it can be passed as an argument when creating the directory watch.
-            musicDirectory = xmlMusicDirPathFinder();
+            musicDirectory = xmlMusicDirPathFinder();        
         }
+        
+        while(xmlFileNum==0)
+            NoFilesInMusicDir();
+    }
+
+    /**
+     * Thông báo đường dẫn không có file âm nhạc
+     */
+    public static void NoFilesInMusicDir() {
+            //Show Alert thông báo không có file nhạc trong folder
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText("Đường dẫn trống");
+            alert.setContentText("Đường dẫn của bạn không có file nhạc!");
+            alert.showAndWait();
+
+            createLibraryXML();
     }
 
     /**
      *  Lấy đường dẫn vào folder nhạc của library.xml
-      * @return Path
+      * @return Path đường dẫn folder music
      */
     private static Path xmlMusicDirPathFinder() {
         try {
@@ -351,6 +380,10 @@ public class MusicPlayer extends Application {
         XMLEditor.addDeleteChecker();
     }
 
+    /**
+     * Hiển thị dialog hỗ trợ tạo file library.xml
+     * Click vào Import button sẽ chạy task tạo library.xml
+     */
     private static void createLibraryXML() {
         try {
             FXMLLoader loader = new FXMLLoader(MusicPlayer.class.getResource(Resources.FXML + "ImportMusicDialog.fxml"));
@@ -483,6 +516,7 @@ public class MusicPlayer extends Application {
      * Skips song.
      */
     public static void skip() {
+        //Nếu nằm bài hát hiện tại nằm trong size của playlist thì chơi bài tiếp theo
         if (nowPlayingIndex < nowPlayingList.size() - 1) {
             boolean isPlaying = isPlaying();
             mainController.updatePlayPauseIcon(isPlaying);
@@ -490,7 +524,10 @@ public class MusicPlayer extends Application {
             if (isPlaying) {
                 play();
             }
-        } else if (isLoopActive) {
+        }
+        //Nếu index không nằm trong size playlist
+        else if (isLoopActive) {
+            //Kiểm tra có lặp bài hát đang chơi, nếu có chơi lại
             boolean isPlaying = isPlaying();
             mainController.updatePlayPauseIcon(isPlaying);
             nowPlayingIndex = 0;
@@ -499,6 +536,7 @@ public class MusicPlayer extends Application {
                 play();
             }
         } else {
+            //Nếu không lặp thì quay lại bài đầu tiên trong ds
             mainController.updatePlayPauseIcon(false);
             nowPlayingIndex = 0;
             setNowPlaying(nowPlayingList.get(nowPlayingIndex));

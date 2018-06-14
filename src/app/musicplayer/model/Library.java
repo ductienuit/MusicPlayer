@@ -51,6 +51,7 @@ public final class Library {
     private static final String PLAYDATE = "playDate";
     private static final String LOCATION = "location";
 
+    //Mảng danh sách đối tượng Song
     private static ArrayList<Song> songs;
     private static ArrayList<Artist> artists;
     private static ArrayList<Album> albums;
@@ -58,6 +59,12 @@ public final class Library {
     private static int maxProgress;
     private static ImportMusicTask<Boolean> task;
 
+    /**
+     * Tạo file xml từ folder nhạc sử dụng task để tăng tốc độ xử lí
+     * @param path Đường dẫn folder nhạc
+     * @param task Tiến trình thêm danh sách, đồng bộ với controller progress hiển thị
+     *             % hoàn thành
+     */
     public static void importMusic(String path, ImportMusicTask<Boolean> task) throws Exception {
 
         Library.maxProgress = 0;
@@ -91,18 +98,20 @@ public final class Library {
         int id = 0;
         File directory = new File(Paths.get(path).toUri());
 
+        //Lấy số file để biết cần bao nhiêu file trong tiến trình
         getMaxProgress(directory);
+        //Cập nhật max min trong control progress để hiển thị khi nào xong
         Library.task.updateProgress(id, Library.maxProgress);
 
-        // Writes xml file and returns the number of files in the music directory.
+        // Viết vào XML file và trả về số file trong folder nhạc
         int i = writeXML(directory, doc, songs, id);
         String fileNumber = Integer.toString(i);
 
-        // Adds the number of files in the music directory to the appropriate section in the xml file.
+        // Thêm số file trong folder nhạc vào xml
         musicLibraryFileNum.setTextContent(fileNumber);
         musicLibrary.appendChild(musicLibraryFileNum);
 
-        // Finds the last id that was assigned to a song and adds it to the xml file.
+        // Tìm last id trong danh sách bài hát và thêm vào xml
         int j = i - 1;
         lastIdAssigned.setTextContent(Integer.toString(j));
         musicLibrary.appendChild(lastIdAssigned);
@@ -122,6 +131,10 @@ public final class Library {
         Library.task = null;
     }
 
+    /**
+     * Tính số file nhạc được hỗ trợ trong đường dẫn
+     * @param directory đường dẫn folder âm nhạc
+     */
     private static void getMaxProgress(File directory) {
         File[] files = directory.listFiles();
 
@@ -134,6 +147,14 @@ public final class Library {
         }
     }
 
+    /**
+     * Thêm các element bài hát vào element danh sách. Mục đích lưu vào trong xml
+     * @param directory Đường dẫn folder chứa nhạc
+     * @param doc Trình tạo xml
+     * @param songs Node Songs - Chứa danh sách thông tin các bài hát
+     * @param i Cập nhật progress % hoàn thành
+     * @return
+     */
     private static int writeXML(File directory, Document doc, Element songs, int i) {
         File[] files = directory.listFiles();
 
@@ -208,6 +229,11 @@ public final class Library {
         return i;
     }
 
+    /**
+     *  Kiểm tra có nằm trong danh sách file được hỗ trợ
+     * @param fileName
+     * @return
+     */
     public static boolean isSupportedFileType(String fileName) {
 
         String extension = "";
@@ -231,7 +257,7 @@ public final class Library {
     }
 
     /**
-     * Gets a list of songs.
+     * Lấy danh sách đối tượng song (bài hát)
      * @return observable list of songs
      */
     public static ObservableList<Song> getSongs() {
@@ -258,6 +284,10 @@ public final class Library {
         return songs.stream().filter(song -> title.equals(song.getTitle())).findFirst().get();
     }
 
+    /**
+     * Cập nhật SongsList
+     * Duyệt toàn bộ library xml file và tạo đối tượng ánh xạ Song sau đó thêm vào songsList
+     */
     private static void updateSongsList() {
         try {
 
@@ -349,14 +379,14 @@ public final class Library {
     }
 
     /**
-     * Gets a list of albums.
-     *
-     * @return observable list of albums
+     * Lấy ra albums arraylist
+     * Duyệt toàn bộ library xml file và tạo đối tượng ánh xạ album sau đó thêm vào albums arraylist
      */
     public static ObservableList<Album> getAlbums() {
         // If the observable list of albums has not been initialized.
         if (albums == null) {
             if (songs == null) {
+                //Nếu danh sách trống thì cập nhật lại danh sách bài hát
                 getSongs();
             }
             // Updates the albums array list.
@@ -372,6 +402,10 @@ public final class Library {
         return albums.stream().filter(album -> title.equals(album.getTitle())).findFirst().get();
     }
 
+    /**
+     * Cập nhật albums arraylist
+     * Dựa vào songs array list, tạo group by bộ dữ liệu album title artist
+     */
     private static void updateAlbumsList() {
         albums = new ArrayList<>();
 
@@ -406,8 +440,8 @@ public final class Library {
     }
 
     /**
-     * Gets a list of artists.
-     *
+     * Lấy danh sách ObservableList  Artist, ObservableList dùng để
+     * chèn vào các cell table, grid ...
      * @return observable list of artists
      */
     public static ObservableList<Artist> getArtists() {
@@ -415,7 +449,7 @@ public final class Library {
             if (albums == null) {
                 getAlbums();
             }
-            // Updates the artists array list.
+            // Cập nhật danh sách Artist
             updateArtistsList();
         }
         return FXCollections.observableArrayList(artists);
@@ -428,6 +462,10 @@ public final class Library {
         return artists.stream().filter(artist -> title.equals(artist.getTitle())).findFirst().get();
     }
 
+    /**
+     * Cập nhật danh sách artists
+     * Dùng filter để lọc ra danh sách artist dựa vào danh sách album
+     */
     private static void updateArtistsList() {
         artists = new ArrayList<>();
 
@@ -491,6 +529,11 @@ public final class Library {
         playlists.remove(playlist);
     }
 
+    /**
+     * Lấy ra danh sách những playlist(ds vừa nghe, ds nghe nhiều nhất, ds bạn tạo
+     * trong library xml
+     * @return Danh sách ObservableList<Playlist>
+     */
     public static ObservableList<Playlist> getPlaylists() {
         if (playlists == null) {
 
@@ -515,8 +558,7 @@ public final class Library {
                     } else if (reader.isStartElement()) {
                         element = reader.getName().getLocalPart();
 
-                        // If the element is a play list, reads the element attributes to retrieve
-                        // the play list id and title.
+                        // Nếu element là một playlist, đọc giá trị của element là playlist id và tên playlist
                         if (element.equals("playlist")) {
                             isPlaylist = true;
 
@@ -524,12 +566,12 @@ public final class Library {
                             title = reader.getAttributeValue(1);
                         }
                     } else if (reader.isCharacters() && isPlaylist) {
-                        // Retrieves the reader value (song ID), gets the song and adds it to the songs list.
+                        // Nhận giá trị reader (song ID), lấy bài hát theo id vào thêm vào danh sách bài hát
                         String value = reader.getText();
                         songs.add(getSong(Integer.parseInt(value)));
                     } else if (reader.isEndElement() && reader.getName().getLocalPart().equals("playlist")) {
-                        // If the play list id, title, and songs have been retrieved, a new play list is created
-                        // and the values reset.
+                        // Nếu các thông tin playlist (playlist id, tên và danh sách bài hát) đã có,
+                        // tạo ra một playlist mới và thêm vào danh sách playlists
                         playlists.add(new Playlist(id, title, songs));
                         id = -1;
                         title = null;
@@ -544,6 +586,7 @@ public final class Library {
                 ex.printStackTrace();
             }
 
+            //Sắp xếp lại danh sách theo thứ tự id
             playlists.sort((x, y) -> {
                 if (x.getId() < y.getId()) {
                     return 1;
@@ -554,6 +597,7 @@ public final class Library {
                 }
             });
 
+            //Tạo most played playlist và recently played playlist
             playlists.add(new MostPlayedPlaylist(-2));
             playlists.add(new RecentlyPlayedPlaylist(-1));
         } else {
@@ -588,6 +632,10 @@ public final class Library {
         return playlists.stream().filter(playlist -> title.equals(playlist.getTitle())).findFirst().get();
     }
 
+    /**
+     * Lấy danh sách bài hát đang được chơi
+     * @return  ArrayList<Song>
+     */
     public static ArrayList<Song> loadPlayingList() {
 
         ArrayList<Song> nowPlayingList = new ArrayList<>();
