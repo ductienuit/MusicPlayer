@@ -65,14 +65,14 @@ public class AlbumsController implements Initializable, SubView {
     
     private boolean isAlbumDetailCollapsed = true;
     
-    // Initializes values used for animations.
+    // Giá trị khởi tạo cho animation của album
     private double expandedHeight = 400;
     private double collapsedHeight = 0;
     
-    // Initializes the index for the currently selected cell.
+    // Khởi tạo chỉ số cho ô album đang được chọn
     private int currentCell;
     
-    // Initializes the value of the x-coordinate for the currently selected cell.
+    // Khởi tạo tọa độ của ô album đang chọn
     private double currentCellYCoordinate;
     
     private Song selectedSong;
@@ -136,7 +136,7 @@ public class AlbumsController implements Initializable, SubView {
         	event.consume();
         });
         
-        // Sets the playing properties for the songs in the song table.
+        //Cho biết bài hát nào đang được chơi trong album
         songTable.setRowFactory(x -> {
             TableRow<Song> row = new TableRow<Song>();
 
@@ -236,7 +236,7 @@ public class AlbumsController implements Initializable, SubView {
         	}
         });
         
-        // Plays selected song when enter key is pressed.
+        //Chơi bài hát đang chọn nếu nhấn enter.
         songTable.setOnKeyPressed(event -> {
         	if (event.getCode().equals(KeyCode.ENTER)) {
         		play();
@@ -293,15 +293,15 @@ public class AlbumsController implements Initializable, SubView {
         	
         	PseudoClass selected = PseudoClass.getPseudoClass("selected");
         	
-        	// If the album detail is collapsed, expand it and populate song table.
+        	// Nếu chi tiết album đang không hiển thị thì hiển thị nó và khởi tạo bảng album
         	if (isAlbumDetailCollapsed) {
         		
         		cell.pseudoClassStateChanged(selected, true);
         		
-            	// Updates the index of the currently selected cell.
+            	//Cập nhật chỉ số ô đang được chọn
             	currentCell = index;
             	
-        		// Shows song table, plays load animation and populates song table with album songs.
+        		//Hiển thị bảng bài hát của album
         		expandAlbumDetail();
         		expandAnimation.play();
         		
@@ -309,12 +309,11 @@ public class AlbumsController implements Initializable, SubView {
         		albumLabel.setText(album.getTitle());
         		populateSongTable(cell, album);
         		
-        		// Else if album detail is expanded and opened album is reselected.
+        		// Nếu chi tiết album đang hiển thị, ẩn bảng danh sách bài hát
         	} else if (!isAlbumDetailCollapsed && index == currentCell) {
         		
         		cell.pseudoClassStateChanged(selected, false);
-        		
-        		// Plays the collapse animation to remove the song table.
+
         		collapseAnimation.play();
         		
         		// Else if album detail is expanded and a different album is selected on the same row.
@@ -328,8 +327,7 @@ public class AlbumsController implements Initializable, SubView {
         		
             	// Updates the index of the currently selected cell.
             	currentCell = index;
-            	
-            	// Plays load animation and populates song table with songs of newly selected album.
+
             	tableCollapseAnimation.setOnFinished(x -> {
             		artistLabel.setText(album.getArtist());
             		albumLabel.setText(album.getTitle());
@@ -349,14 +347,12 @@ public class AlbumsController implements Initializable, SubView {
         			child.pseudoClassStateChanged(selected, false);
         		}
         		cell.pseudoClassStateChanged(selected, true);
-        		
-            	// Updates the index of the currently selected cell.
+
             	currentCell = index;
-            	
-            	// Collapses the song table and then expands it in the appropriate row with songs on new album.
+
             	collapseAlbumDetail();
         		expandAlbumDetail();
-        		// Plays load animation and populates song table with songs of newly selected album.
+
         		tableCollapseAnimation.setOnFinished(x -> {
         			artistLabel.setText(album.getArtist());
             		albumLabel.setText(album.getTitle());
@@ -373,11 +369,9 @@ public class AlbumsController implements Initializable, SubView {
         		for (Node child : grid.getChildren()) {
         			child.pseudoClassStateChanged(selected, false);
         		}
-        		
-        		// Plays the collapse animation to remove the song table.
+
         		collapseAnimation.play();
         	}
-        	// Sets the cells max x value as the current cell x coordinate.
         	currentCellYCoordinate = cell.getBoundsInParent().getMaxY();
         });
         
@@ -406,9 +400,14 @@ public class AlbumsController implements Initializable, SubView {
     	songTable.getItems().clear();
     	songBox.setVisible(false);
     }
-    
+
+    /**
+     * Tạo danh sách bài hát của album
+     * @param cell
+     * @param selectedAlbum
+     */
     private void populateSongTable(VBox cell, Album selectedAlbum) { 	
-    	// Retrieves albums songs and stores them as an observable list.
+
     	ObservableList<Song> albumSongs = FXCollections.observableArrayList(selectedAlbum.getSongs());
     	
         playingColumn.setCellFactory(x -> new PlayingTableCell<Song, Boolean>());
@@ -416,13 +415,11 @@ public class AlbumsController implements Initializable, SubView {
         lengthColumn.setCellFactory(x -> new ClippedTableCell<Song, String>());
         playsColumn.setCellFactory(x -> new ClippedTableCell<Song, Integer>());
 
-        // Sets each column item.
         playingColumn.setCellValueFactory(new PropertyValueFactory<Song, Boolean>("playing"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("title"));
         lengthColumn.setCellValueFactory(new PropertyValueFactory<Song, String>("length"));
         playsColumn.setCellValueFactory(new PropertyValueFactory<Song, Integer>("playCount"));
-        
-        // Adds songs to table.
+
         songTable.setItems(albumSongs);
         double height = (albumSongs.size() + 1) * 50 + 2;
         Animation songTableLoadAnimation = new Transition() {
