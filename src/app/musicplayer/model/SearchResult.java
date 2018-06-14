@@ -14,6 +14,7 @@ public class SearchResult {
         this.artistResults = artistResults;
     }
 
+
     public List<Song> getSongResults() { return songResults; }
 
     public List<Album> getAlbumResults() { return albumResults; }
