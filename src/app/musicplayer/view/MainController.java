@@ -261,6 +261,7 @@ public class MainController implements Initializable, IntellitypeListener {
     	}
     }
 
+    //Tạo popup tìm kiếm
 	private void createSearchPopup() {
 		try {
 
@@ -886,6 +887,7 @@ public class MainController implements Initializable, IntellitypeListener {
     	}
     }
 
+    //Hiển thị kết quả tìm kiếm
     public void showSearchResults(SearchResult result) {
         VBox root = (VBox) searchPopup.getScene().getRoot();
         ObservableList<Node> list = root.getChildren();
