@@ -95,22 +95,27 @@ public class MainController implements Initializable, IntellitypeListener {
     	
     	sliderSkin = new CustomSliderSkin(timeSlider);
     	timeSlider.setSkin(sliderSkin);
-    	
+
+    	//Tạo popup volume
     	createVolumePopup();
+    	//Tạo popup search
         createSearchPopup();
 
+        //Sự kiện click nút loop thì thêm css màu và chuyển cờ Loop ở MusicPlayer
     	PseudoClass active = PseudoClass.getPseudoClass("active");
     	loopButton.setOnMouseClicked(x -> {
     		sideBar.requestFocus();
     		MusicPlayer.toggleLoop();
     		loopButton.pseudoClassStateChanged(active, MusicPlayer.isLoopActive());
     	});
+        //Sự kiện click nút shuffle thì thêm css màu và chuyển cờ shuffle ở MusicPlayer
     	shuffleButton.setOnMouseClicked(x -> {
     		sideBar.requestFocus();
     		MusicPlayer.toggleShuffle();
     		shuffleButton.pseudoClassStateChanged(active, MusicPlayer.isShuffleActive());
     	});
-    	
+
+        // Nhấn vào nút này không làm mất tiêu điểm (Focus) của thành phần khác.
     	timeSlider.setFocusTraversable(false);
     	
         timeSlider.valueChangingProperty().addListener(
