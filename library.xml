@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <library>
     <musicLibrary>
-        <path>D:\Music\test</path>
+        <path>C:\Users\alibaba\Documents\GitHub\Data\test</path>
         <fileNum>6</fileNum>
         <lastId>5</lastId>
     </musicLibrary>
@@ -15,8 +15,8 @@
             <trackNumber>0</trackNumber>
             <discNumber>0</discNumber>
             <playCount>0</playCount>
-            <playDate>2018-06-13T22:21:26.337</playDate>
-            <location>D:\Music\test\3LAU - How You Love Me (Feat. Bright Lights) ~by Thissongissick.com [soundtake.net].mp3</location>
+            <playDate>2018-06-14T01:41:53.218</playDate>
+            <location>C:\Users\alibaba\Documents\GitHub\Data\test\3LAU - How You Love Me (Feat. Bright Lights) ~by Thissongissick.com [soundtake.net].mp3</location>
         </song>
         <song>
             <id>1</id>
@@ -27,8 +27,8 @@
             <trackNumber>0</trackNumber>
             <discNumber>0</discNumber>
             <playCount>0</playCount>
-            <playDate>2018-06-13T22:21:26.398</playDate>
-            <location>D:\Music\test\A R I Z O N A - Where I Wanna Be (James Carter &amp; Levi Remix) ~by James Carter [soundtake.net].mp3</location>
+            <playDate>2018-06-14T01:41:53.223</playDate>
+            <location>C:\Users\alibaba\Documents\GitHub\Data\test\A R I Z O N A - Where I Wanna Be (James Carter &amp; Levi Remix) ~by James Carter [soundtake.net].mp3</location>
         </song>
         <song>
             <id>2</id>
@@ -39,8 +39,8 @@
             <trackNumber>0</trackNumber>
             <discNumber>0</discNumber>
             <playCount>0</playCount>
-            <playDate>2018-06-13T22:21:26.450</playDate>
-            <location>D:\Music\test\aKu - The Final Blow ~by aKu [soundtake.net].mp3</location>
+            <playDate>2018-06-14T01:41:53.228</playDate>
+            <location>C:\Users\alibaba\Documents\GitHub\Data\test\aKu - The Final Blow ~by aKu [soundtake.net].mp3</location>
         </song>
         <song>
             <id>3</id>
@@ -51,8 +51,8 @@
             <trackNumber>0</trackNumber>
             <discNumber>0</discNumber>
             <playCount>0</playCount>
-            <playDate>2018-06-13T22:21:26.497</playDate>
-            <location>D:\Music\test\Alina Baraz &amp; Galimatias - Fantasy ~by Alina Baraz [soundtake.net].mp3</location>
+            <playDate>2018-06-14T01:41:53.234</playDate>
+            <location>C:\Users\alibaba\Documents\GitHub\Data\test\Alina Baraz &amp; Galimatias - Fantasy ~by Alina Baraz [soundtake.net].mp3</location>
         </song>
         <song>
             <id>4</id>
@@ -63,8 +63,8 @@
             <trackNumber>0</trackNumber>
             <discNumber>0</discNumber>
             <playCount>0</playCount>
-            <playDate>2018-06-13T22:21:26.520</playDate>
-            <location>D:\Music\test\Armin van Buuren feat. Mr. Probz - Another You (Mark Sixma Remix) [ASOT 711] [OUT NOW!] ~by Mark Sixma [soundtake.net] - Copy.mp3</location>
+            <playDate>2018-06-14T01:41:53.239</playDate>
+            <location>C:\Users\alibaba\Documents\GitHub\Data\test\Armin van Buuren feat. Mr. Probz - Another You (Mark Sixma Remix) [ASOT 711] [OUT NOW!] ~by Mark Sixma [soundtake.net] - Copy.mp3</location>
         </song>
         <song>
             <id>5</id>
@@ -75,8 +75,8 @@
             <trackNumber>0</trackNumber>
             <discNumber>0</discNumber>
             <playCount>0</playCount>
-            <playDate>2018-06-13T22:21:26.561</playDate>
-            <location>D:\Music\test\Armin van Buuren feat. Mr. Probz - Another You (Mark Sixma Remix) [ASOT 711] [OUT NOW!] ~by Mark Sixma [soundtake.net].mp3</location>
+            <playDate>2018-06-14T01:41:53.254</playDate>
+            <location>C:\Users\alibaba\Documents\GitHub\Data\test\Armin van Buuren feat. Mr. Probz - Another You (Mark Sixma Remix) [ASOT 711] [OUT NOW!] ~by Mark Sixma [soundtake.net].mp3</location>
         </song>
     </songs>
     <playlists/>
