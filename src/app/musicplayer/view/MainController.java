@@ -478,7 +478,7 @@ public class MainController implements Initializable, IntellitypeListener {
                 previousItem.getStyleClass().setAll("sideBarItem");
             }
         }
-
+        //LoadView tương ứng với HBox được click
         ObservableList<String> styles = eventSource.getStyleClass();
 
         if (styles.get(0).equals("sideBarItem")) {
@@ -677,7 +677,12 @@ public class MainController implements Initializable, IntellitypeListener {
     	
     	return text;
     }
-    
+
+    /**
+     *
+     * Kiểm tra viewName tương ứng với HBox vừa được click và load SubView tương ứng
+     */
+
     public SubView loadView(String viewName) {
         try {
         	
@@ -716,7 +721,7 @@ public class MainController implements Initializable, IntellitypeListener {
 	        
 	        final boolean loadLettersFinal = loadLetters;
 	        final boolean unloadLettersFinal = unloadLetters;
-        	
+        	// Tạo file .fxml tương ứng
             String fileName = viewName.substring(0, 1).toUpperCase() + viewName.substring(1) + ".fxml";
             
             FXMLLoader loader = new FXMLLoader(this.getClass().getResource(fileName));
