@@ -24,6 +24,7 @@ public class Search {
         return result;
     }
 
+    //Tìm theo thứ tự artist, album, song
     public static void search(String searchText) {
         if (searchThread != null && searchThread.isAlive()) {
             searchThread.interrupt();
@@ -114,6 +115,7 @@ public class Search {
 
                 if (searchThread.isInterrupted()) { throw new InterruptedException(); }
 
+                //Giới hạn kết quả tìm kiếm
                 if (songResults.size() > 3) songResults = songResults.subList(0, 3);
                 if (albumResults.size() > 3) albumResults = albumResults.subList(0, 3);
                 if (artistResults.size() > 3) artistResults = artistResults.subList(0, 3);

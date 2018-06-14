@@ -18,7 +18,7 @@ import javafx.scene.image.Image;
 
 /**
  * Model class for an Artist
- *
+ * @author haitho263
  */
 public final class Artist implements Comparable<Artist> {
 
@@ -82,7 +82,7 @@ public final class Artist implements Comparable<Artist> {
 
         return artistImage;
     }
-
+// Dùng API để download ArtistImage nếu thư mục ImgFolder rỗng
     public void downloadArtistImage() {
         try {
             File file = new File(Resources.JAR + "/img/" + this.title + ".jpg");

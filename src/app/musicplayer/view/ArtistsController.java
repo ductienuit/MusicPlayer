@@ -33,8 +33,8 @@ import javafx.util.Duration;
 public class ArtistsController implements Initializable, SubView {
 
     @FXML private FlowPane grid;
-    
     @Override
+
     public void initialize(URL location, ResourceBundle resources) {
 
         ObservableList<Artist> artists = Library.getArtists();
@@ -66,7 +66,11 @@ public class ArtistsController implements Initializable, SubView {
 
         }).start();
     }
-    
+
+    /**
+     * Tạo ra các artist-cell dựa vào đối tượng artist
+     *
+     */
     private VBox createCell(Artist artist) {
 
         VBox cell = new VBox();
