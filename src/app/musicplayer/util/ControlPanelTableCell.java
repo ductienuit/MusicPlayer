@@ -13,6 +13,11 @@ import javafx.scene.control.TableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
+/**
+ *
+ * @param <S>
+ * @param <T>
+ */
 public class ControlPanelTableCell<S, T> extends TableCell<S, T> {
 	
 	private ChangeListener<Boolean> listener = (observable, oldValue, newValue) ->

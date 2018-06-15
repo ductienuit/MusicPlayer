@@ -94,6 +94,9 @@ public class SongsController implements Initializable, SubView {
         
         tableView.setItems(songs);
 
+        /**
+         * Thêm sự kiện cho các hàng của table song
+         */
         tableView.setRowFactory(x -> {
             TableRow<Song> row = new TableRow<>();
 
@@ -257,7 +260,11 @@ public class SongsController implements Initializable, SubView {
         MusicPlayer.setNowPlaying(song);
         MusicPlayer.play();
     }
-    
+
+    /**
+     * Hàm sắp xếp theo ký tự click, sắp xếp và tạo hiệu ứng giữa các row table
+     * @param letter
+     */
     @Override
     public void scroll(char letter) {
     	

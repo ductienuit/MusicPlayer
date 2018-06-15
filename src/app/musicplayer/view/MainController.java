@@ -91,23 +91,33 @@ public class MainController implements Initializable, IntellitypeListener {
     	
     	controlBox.getChildren().remove(2);
     	
-    	frontSliderTrack.prefWidthProperty().bind(timeSlider.widthProperty().multiply(timeSlider.valueProperty().divide(timeSlider.maxProperty())));
+    	frontSliderTrack.prefWidthProperty()
+                .bind(
+                        timeSlider.widthProperty()
+                                .multiply(
+                                        timeSlider.valueProperty().divide(
+                                                timeSlider.maxProperty())));
     	
     	sliderSkin = new CustomSliderSkin(timeSlider);
     	timeSlider.setSkin(sliderSkin);
 
     	//Tạo popup volume
     	createVolumePopup();
+
     	//Tạo popup search
         createSearchPopup();
 
         //Sự kiện click nút loop thì thêm css màu và chuyển cờ Loop ở MusicPlayer
     	PseudoClass active = PseudoClass.getPseudoClass("active");
     	loopButton.setOnMouseClicked(x -> {
+
+    	    //Đặt sideBar làm tiêu điểm
     		sideBar.requestFocus();
+    		//Bật/ tắt cờ loop
     		MusicPlayer.toggleLoop();
     		loopButton.pseudoClassStateChanged(active, MusicPlayer.isLoopActive());
     	});
+
         //Sự kiện click nút shuffle thì thêm css màu và chuyển cờ shuffle ở MusicPlayer
     	shuffleButton.setOnMouseClicked(x -> {
     		sideBar.requestFocus();
@@ -117,19 +127,19 @@ public class MainController implements Initializable, IntellitypeListener {
 
         // Nhấn vào nút này không làm mất tiêu điểm (Focus) của thành phần khác.
     	timeSlider.setFocusTraversable(false);
-    	
+
+    	// Sự kiện khi thay đổi timeSlider
         timeSlider.valueChangingProperty().addListener(
             (slider, wasChanging, isChanging) -> {
 
                 if (wasChanging) {
-
                     int seconds = (int) Math.round(timeSlider.getValue() / 4.0);
                     timeSlider.setValue(seconds * 4);
                     MusicPlayer.seek(seconds);
                 }
             }
         );
-
+        // Sự kiện Slider khi đã thay đổi giá trị slider
         timeSlider.valueProperty().addListener(
             (slider, oldValue, newValue) -> {
 
@@ -148,6 +158,7 @@ public class MainController implements Initializable, IntellitypeListener {
         	letterBox.setPrefHeight(0);
         	letterSeparator.setPrefHeight(0);
 		});
+
 
 		searchBox.textProperty().addListener((observable, oldText, newText) -> {
 			String text = newText.trim();
@@ -179,6 +190,7 @@ public class MainController implements Initializable, IntellitypeListener {
             }
 		});
 
+
 		MusicPlayer.getStage().xProperty().addListener((observable, oldValue, newValue) -> {
             if (searchPopup.isShowing() && !searchHideAnimation.getStatus().equals(Status.RUNNING)) {
                 searchHideAnimation.play();
@@ -191,6 +203,7 @@ public class MainController implements Initializable, IntellitypeListener {
             }
         });
 
+        //Giản cách giữa các chữ cái letterBox
 		for (Node node : letterBox.getChildren()) {
         	Label label = (Label)node;
         	label.prefWidthProperty().bind(letterBox.widthProperty().subtract(50).divide(26).subtract(1));
@@ -292,9 +305,11 @@ public class MainController implements Initializable, IntellitypeListener {
 			ex.printStackTrace();
 		}
 	}
-    
-    public void updateNowPlayingButton() {
 
+	/**
+	 * Cập nhật thông tin bài hát đang chơi trong controller
+	 */
+	public void updateNowPlayingButton() {
         Song song = MusicPlayer.getNowPlaying();
         if (song != null) {
             nowPlayingTitle.setText(song.getTitle());
@@ -307,7 +322,10 @@ public class MainController implements Initializable, IntellitypeListener {
         }
     }
 
-    public void initializeTimeSlider() {
+	/**
+	 * Khởi tạo time slider
+	 */
+	public void initializeTimeSlider() {
 
         Song song = MusicPlayer.getNowPlaying();
         if (song != null) {
@@ -345,8 +363,11 @@ public class MainController implements Initializable, IntellitypeListener {
         timePassed.setText(MusicPlayer.getTimePassed());
         timeRemaining.setText(MusicPlayer.getTimeRemaining());
     }
-    
-    @SuppressWarnings("unchecked")
+
+	/**
+	 * Khởi tạo playlist recently played, most played, thêm sự kiện click vào các HBOX playlist
+	 */
+	@SuppressWarnings("unchecked")
 	private void initializePlaylists() {
     	for (Playlist playlist : Library.getPlaylists()) {
     		try {
@@ -357,6 +378,7 @@ public class MainController implements Initializable, IntellitypeListener {
 				
 				cell.setOnMouseClicked(x -> {
 					selectView(x);
+					//Đỗ dự liệu playlist vào playlist mới
 					((PlaylistsController) subViewController).selectPlaylist(playlist);
 				});
 				
@@ -381,7 +403,6 @@ public class MainController implements Initializable, IntellitypeListener {
 							&& event.getDragboard().hasString()) {
 						
 						cell.pseudoClassStateChanged(hover, true);
-						//cell.getStyleClass().setAll("sideBarItemSelected");
 					}
 				});
 				
@@ -392,7 +413,6 @@ public class MainController implements Initializable, IntellitypeListener {
 							&& event.getDragboard().hasString()) {
 						
 						cell.pseudoClassStateChanged(hover, false);
-						//cell.getStyleClass().setAll("sideBarItem");
 					}
 				});
 				
@@ -472,7 +492,8 @@ public class MainController implements Initializable, IntellitypeListener {
         HBox eventSource = ((HBox)e.getSource());
 
         eventSource.requestFocus();
-//Thêm lớp CSS cho lớp Control trước đó
+
+        //Tìm control dựa vò lớp class css sideBarItemSelected
         Optional <Node> previous = sideBar.getChildren().stream()
             .filter(x -> x.getStyleClass().get(0).equals("sideBarItemSelected")).findFirst();
 
@@ -487,7 +508,7 @@ public class MainController implements Initializable, IntellitypeListener {
                 previousItem.getStyleClass().setAll("sideBarItem");
             }
         }
-        //LoadView tương ứng với HBox được click
+        //Lấy danh sách các class css lưu trong controller
         ObservableList<String> styles = eventSource.getStyleClass();
 
         if (styles.get(0).equals("sideBarItem")) {
@@ -730,7 +751,7 @@ public class MainController implements Initializable, IntellitypeListener {
 	        
 	        final boolean loadLettersFinal = loadLetters;
 	        final boolean unloadLettersFinal = unloadLetters;
-        	// Tạo file .fxml tương ứng
+        	// Lấy file .fxml tương ứng
             String fileName = viewName.substring(0, 1).toUpperCase() + viewName.substring(1) + ".fxml";
             
             FXMLLoader loader = new FXMLLoader(this.getClass().getResource(fileName));
@@ -895,7 +916,10 @@ public class MainController implements Initializable, IntellitypeListener {
     	}
     }
 
-    //Hiển thị kết quả tìm kiếm
+	/**
+	 *
+	 * Hiển thị kết quả tìm kiếm
+	 */
     public void showSearchResults(SearchResult result) {
         VBox root = (VBox) searchPopup.getScene().getRoot();
         ObservableList<Node> list = root.getChildren();
@@ -1174,8 +1198,10 @@ public class MainController implements Initializable, IntellitypeListener {
     		letterSeparator.setOpacity(frac);
         }
     };
-    
-    private Animation unloadLettersAnimation = new Transition() {
+	/**
+	 * Hiệu ứng khi chuyển qua nhấn letter khác
+	 */
+	private Animation unloadLettersAnimation = new Transition() {
     	{
             setCycleDuration(Duration.millis(250));
             setInterpolator(Interpolator.EASE_BOTH);
@@ -1185,8 +1211,11 @@ public class MainController implements Initializable, IntellitypeListener {
     		letterSeparator.setOpacity(1.0 - frac);
         }
     };
-    
-    private Animation newPlaylistAnimation = new Transition() {
+
+	/**
+	 * Hiệu ứng khi tạo playlist mới
+	 */
+	private Animation newPlaylistAnimation = new Transition() {
     	{
             setCycleDuration(Duration.millis(500));
             setInterpolator(Interpolator.EASE_BOTH);

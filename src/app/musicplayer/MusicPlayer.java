@@ -635,6 +635,10 @@ public class MusicPlayer extends Application {
         Library.savePlayingList();
     }
 
+    /**
+     * Chơi bài hát được nhập vào
+     * @param song bài hát cần đc chơi
+     */
     public static void setNowPlaying(Song song) {
         if (nowPlayingList.contains(song)) {
 

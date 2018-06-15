@@ -50,6 +50,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
+/**
+ * @author DucTien
+ */
 public class PlaylistsController implements Initializable, SubView {
 
     @FXML private TableView<Song> tableView;
@@ -61,7 +64,6 @@ public class PlaylistsController implements Initializable, SubView {
     @FXML private TableColumn<Song, Integer> playsColumn;
     
     @FXML private Label playlistTitleLabel;
-    @FXML private HBox controlBox;
     @FXML private Pane deleteButton;
 
     private Playlist selectedPlaylist;
@@ -69,7 +71,10 @@ public class PlaylistsController implements Initializable, SubView {
     
     // Used to store the individual playlist boxes from the playlistBox. 
     private HBox cell;
-    
+
+    /**
+     * Hiệu ứng khi xóa playlist
+     */
     private Animation deletePlaylistAnimation = new Transition() {
         {
             setCycleDuration(Duration.millis(500));
@@ -214,7 +219,7 @@ public class PlaylistsController implements Initializable, SubView {
             }
         });
         
-        // Plays selected song when enter key is pressed.
+        // Chơi bài nhạc đã chọn khi nhấn phím Enter
         tableView.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 play();
@@ -242,6 +247,10 @@ public class PlaylistsController implements Initializable, SubView {
         MusicPlayer.play();
     }
 
+    /**
+     * Đỗ dự liệu vào PlaylistController
+     * @param playlist nhạc
+     */
     void selectPlaylist(Playlist playlist) {
         // Displays the delete button only if the user has not selected one of the default playlists.
         if (playlist instanceof MostPlayedPlaylist || playlist instanceof RecentlyPlayedPlaylist) {

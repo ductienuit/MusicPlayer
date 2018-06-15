@@ -2,6 +2,7 @@ package app.musicplayer.model;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -181,21 +182,51 @@ public final class Library {
                     Element location = doc.createElement("location");
 
                     id.setTextContent(Integer.toString(i++));
-                    title.setTextContent(tag.getFirst(FieldKey.TITLE));
-                    String artistTitle = tag.getFirst(FieldKey.ALBUM_ARTIST);
-                    if (artistTitle == null || artistTitle.equals("") || artistTitle.equals("null")) {
-                        artistTitle = tag.getFirst(FieldKey.ARTIST);
+                    
+                    String artistTitle = null;
+                    String albumSong = null;
+                    String track = null;
+                    String disc = null;
+                    String titleSong= null;
+                    if(tag==null)
+                    {
+                    	Path path = file.toPath();
+                        String fileName = path.getFileName().toString();
+                        titleSong = fileName.substring(0, fileName.lastIndexOf('.'));
+                        title.setTextContent(titleSong);                                               
+                       
+                        album.setTextContent("Unknown Album");
+                       
+                        artist.setTextContent("Unknown Artist");
                     }
+                    else {
+                    	artistTitle = tag.getFirst(FieldKey.ALBUM_ARTIST);
+                    	albumSong = tag.getFirst(FieldKey.ALBUM);
+                    	track = tag.getFirst(FieldKey.TRACK);
+                    	disc = tag.getFirst(FieldKey.DISC_NO);
+                    	titleSong= tag.getFirst(FieldKey.TITLE);
+                    }
+                    
+                      
+                    if (titleSong == null || titleSong.equals("") || titleSong.equals("null")) {
+                    	Path path = file.toPath();
+                        String fileName = path.getFileName().toString();
+                        titleSong = fileName.substring(0, fileName.lastIndexOf('.'));
+                    }
+                    title.setTextContent(titleSong);
+                    
+                    
                     artist.setTextContent(
                             (artistTitle == null || artistTitle.equals("") || artistTitle.equals("null")) ? "" : artistTitle
                     );
-                    album.setTextContent(tag.getFirst(FieldKey.ALBUM));
+                    
+                    album.setTextContent(albumSong);
                     length.setTextContent(Integer.toString(header.getTrackLength()));
-                    String track = tag.getFirst(FieldKey.TRACK);
+                    
                     trackNumber.setTextContent(
                             (track == null || track.equals("") || track.equals("null")) ? "0" : track
                     );
-                    String disc = tag.getFirst(FieldKey.DISC_NO);
+                    
                     discNumber.setTextContent(
                             (disc == null || disc.equals("") || disc.equals("null")) ? "0" : disc
                     );
@@ -351,7 +382,7 @@ public final class Library {
                             break;
                     } // End switch
                 } else if (reader.isEndElement() && reader.getName().getLocalPart().equals("song")) {
-
+                	
                     songs.add(new Song(id, title, artist, album, length, trackNumber, discNumber, playCount, playDate, location));
                     id = -1;
                     title = null;
