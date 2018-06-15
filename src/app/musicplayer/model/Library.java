@@ -200,11 +200,17 @@ public final class Library {
                         artist.setTextContent("Unknown Artist");
                     }
                     else {
-                    	artistTitle = tag.getFirst(FieldKey.ALBUM_ARTIST);
+                    	
                     	albumSong = tag.getFirst(FieldKey.ALBUM);
                     	track = tag.getFirst(FieldKey.TRACK);
                     	disc = tag.getFirst(FieldKey.DISC_NO);
                     	titleSong= tag.getFirst(FieldKey.TITLE);
+                    	
+                    	artistTitle = tag.getFirst(FieldKey.ALBUM_ARTIST);
+                        if (artistTitle == null || artistTitle.equals("") || artistTitle.equals("null")) {
+                            artistTitle = tag.getFirst(FieldKey.ARTIST);
+                        }
+
                     }
                     
                       
