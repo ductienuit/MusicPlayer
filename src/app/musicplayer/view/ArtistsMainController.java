@@ -108,6 +108,9 @@ public class ArtistsMainController implements Initializable, SubView {
         }
     }
 
+    /**
+     * Tạo ra các album cell bên trong ArtistsMain
+     */
     private class AlbumCell extends ListCell<Album> {
 
         private ImageView albumArtwork = new ImageView();
@@ -546,7 +549,11 @@ public class ArtistsMainController implements Initializable, SubView {
     public Song getSelectedSong() {
     	return selectedSong;
     }
-// Hiện danh sách các bài hát trong Album artist
+
+    /**
+     * Hiện danh sách các bài hát trong Album artist
+     */
+
     private void showAllSongs(Artist artist, boolean fromMainController) {
 
         ObservableList<Album> albums = FXCollections.observableArrayList();
@@ -618,6 +625,11 @@ public class ArtistsMainController implements Initializable, SubView {
     }
     //
     @Override
+    /**
+     * Tạo ra danh sách các song cần play,
+     * nếu không có album nào được chọn thì danh sách là tất cả bài hát trong tất cả album tương ứng với Artist,
+     * dựa vào thuộc tính MusicPlayer.isShuffleActive() quyết định nhạc sẽ play theo thứ tự alphabet hay shuffle.
+     */
     public void play() {
     	
     	Song song = selectedSong;
